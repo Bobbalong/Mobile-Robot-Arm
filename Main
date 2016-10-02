@@ -188,21 +188,6 @@ void spdDown() {
   Serial.print(burstTime);
   Serial.println(".");
 }
-void introRunner() {
-  Serial.println("Arm' Control."); delay(2000);
-  Serial.print("\t"); Serial.println("Commands:"); delay(1000);
-  Serial.print("        "); Serial.println("1, 2. Rotate base."); delay(250);
-  Serial.print("        "); Serial.println("4, 7. Motor one - Reverse, Forward."); delay(250);
-  Serial.print("        "); Serial.println("6, 9. Motor two - Reverse, Forward."); delay(250);
-  Serial.print("        "); Serial.println("5, 8. Motor Three - Reverse, Forward."); delay(250);
-  Serial.print("        "); Serial.println("4, 7. Gripper - Open, Close."); delay(250);
-  Serial.print("        "); Serial.println("w, s. Full Forward/Reverse."); delay(250);
-  Serial.print("        "); Serial.println("q, a. Left Wheel Forward/Reverse."); delay(250);
-  Serial.print("        "); Serial.println("q, a. Right Wheel Forward/Reverse."); delay(250);
-  Serial.print("        "); Serial.println("0. Blink"); delay(250);
-  Serial.print("        "); Serial.println("t. Test Routine"); delay(250);
-  Serial.println();
-}
 void testSeq() {
   digitalWrite(LEDpin, HIGH);
   basefwd();
@@ -253,7 +238,7 @@ void setup() {
 
   while (! Serial);
 
-  introRunner();
+  Serial.println("Arm' Control."); delay(2000);
 
   Serial.println("Ready.");
 }
