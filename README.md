@@ -18,3 +18,6 @@ Power- Distinguish what power is needed and define a sutible source that is unte
 Control/Commands- Gain feedback for motor position. Refine controls to tackle motor movement based on duration of input. Define functions to perform specfic maneuvers, i.e. move arm efficiently from current extended position to deposit area on wheelbase. Amend variable burstTime to hold specific milliseconds. 
 
 Controller- Design and develop a tethered handheld device capable of sending commands to Mr A.
+
+Extra credit - Road to awareness.
+----------------
