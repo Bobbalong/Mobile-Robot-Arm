@@ -19,5 +19,5 @@ Control/Commands- Gain feedback for motor position. Refine controls to tackle mo
 
 Controller- Design and develop a tethered handheld device capable of sending commands to Mr A.
 
-Extra credit - Road to awareness.
+Extra credit
 ----------------
