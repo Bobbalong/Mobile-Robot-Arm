@@ -1,3 +1,7 @@
+// a string to hold incoming data
+String serialString1 = "";
+// whether the string is complete
+boolean stringComplete = false;
 //Base Motor
 const int motorPin1 = 2;
 const int motorPin2 = 3;
@@ -47,7 +51,7 @@ int Command;
 const int commandSig[] = {120, 50, 46, 48, 49, 51, 52, 55, 54, 57, 53, 56, 43, 45, 113, 97, 101, 100, 119, 115, 116, 99, 122};
 
 const int commandQty = 22;
-//============================================================================Functions
+//=======================================================================================================================================
 void Blink() {
   digitalWrite(LEDpin, HIGH);
   digitalWrite(LEDpin, LOW);
@@ -212,7 +216,7 @@ void testSeq() {
   digitalWrite(LEDpin, LOW);
 }
 
-//==================================================================================Setup
+//=======================================================================================================================================
 void setup() {
 
 
@@ -242,167 +246,34 @@ void setup() {
 
   Serial.println("Ready.");
 }
-//=====================================================================================Loop
-void loop() {
+//=======================================================================================================================================
+void serialEvent() {
+  while (Serial.available() > 0) {
 
-  if (Serial.available() > 0) {
-    Command = Serial.read();
-    Serial.print(Command);
-    Serial.print(": ");
+    char inChar = (char)Serial.read();
+    serialString1 += inChar;
 
-    for (int x = 0; x < commandQty; x++) {
-
-      if (Command == commandSig[x]) {
-
-        switch (Command) {
-
-          case 't':
-            Serial.println("Test Sequence Initiated");
-            testSeq();
-            break;
-
-          case 'w':
-            Serial.println("Full Forward");
-            fullfwd();
-            break;
-
-          case 's':
-            Serial.println("Full Reverse");
-            fullrev();
-            break;
-
-          case 'q':
-            Serial.println("Right Wheel Forward");
-            wheelRfwd();
-            break;
-
-          case 'a':
-            Serial.println("Right Wheel Reverse");
-            wheelRrev();
-            break;
-
-          case 'e':
-            Serial.println("Left Wheel Forward");
-            wheelLfwd();
-            break;
-
-          case 'd':
-            Serial.println("Left Wheel Reverse");
-            wheelLrev();
-            break;
-
-          case '0':
-            Serial.println("Blink");
-            digitalWrite(LEDpin, HIGH);
-            LEDMillis = millis();
-            LEDstate = true;
-            break;
-
-          case '1':
-            Serial.println("Rotating base, Left.");
-            digitalWrite(motorPin1, HIGH);
-            BmotorMillis = millis();
-            BmotorState = true;
-            break;
-
-          case '3':
-            Serial.println("Rotating base, Right");
-            if (BmotorState == false) {
-              digitalWrite(motorPin2, HIGH);
-              BmotorMillis = millis();
-              BmotorState = true;
-            }
-            break;
-
-          case '7':
-            Serial.println("Motor 1, Forward.");
-            digitalWrite(motorPin3, HIGH);
-            m1Millis = millis();
-            m1State = true;
-            break;
-
-          case '4':
-            Serial.println("Motor 1, Reverse.");
-            if (m1State == false) {
-              digitalWrite(motorPin4, HIGH);
-              m1Millis = millis();
-              m1State = true;
-            }
-            break;
-
-          case '9':
-            Serial.println("Motor 2, Forward.");
-            digitalWrite(motorPin5, HIGH);
-            m2Millis = millis();
-            m2State = true;
-            break;
-
-          case '6':
-            Serial.println("Motor 2, Reverse.");
-            if (m2State == false) {
-              digitalWrite(motorPin6, HIGH);
-              m2Millis = millis();
-              m2State = true;
-            }
-            break;
-
-          case '8':
-            Serial.println("Motor 3, Forward.");
-            digitalWrite(motorPin7, HIGH);
-            m3Millis = millis();
-            m3State = true;
-            break;
-
-          case '5':
-            Serial.println("Motor 3, Reverse.");
-            if (m3State == false) {
-              digitalWrite(motorPin8, HIGH);
-              m3Millis = millis();
-              m3State = true;
-            }
-            break;
-
-          case '+':
-            Serial.println("Gripper, Forward.");
-            gripfwd();
-            break;
-
-          case '-':
-            Serial.println("Gripper, Reverse.");
-            griprev();
-            break;
-
-          case 'z':
-            Serial.println("spin, Left.");
-            spinLeft();
-            break;
-          case 'c':
-            Serial.println("spin, Right.");
-            spinRight();
-            break;
-
-          case '2':
-            spdUp();
-            break;
-
-          case '.':
-            spdDown();
-            break;
-
-          case 'x':
-            spin180r();
-            break;
-          default:
-
-            break;
-        }
-      }
+    if (inChar == '\n') {
+      stringComplete = true;
     }
-    limiter();
   }
-  limiter();
+}
+//=======================================================================================================================================
+void loop() {
+  if (stringComplete) {
+    Serial.println(serialString1);
+
+    if (serialString1 == "t\n")
+    {
+      Serial.println("Test Sequence Initiated");
+      testSeq();
+    }
+    serialString1 = "";
+    stringComplete = false;
+  }
 }
 
+//=======================================================================================================================================
 void limiter() {
   unsigned long currentMillis = millis();
 
