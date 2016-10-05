@@ -202,7 +202,6 @@ void testSeq() {
   spinLeft();
   spinRight();
   spin180l();
-  spin180r();
   wheelRfwd();
   wheelRrev();
   wheelLfwd();
@@ -259,43 +258,36 @@ void loop() {
           case 't':
             Serial.println("Test Sequence Initiated");
             testSeq();
-            Serial.flush();
             break;
 
           case 'w':
             Serial.println("Full Forward");
             fullfwd();
-            Serial.flush();
             break;
 
           case 's':
             Serial.println("Full Reverse");
             fullrev();
-            Serial.flush();
             break;
 
           case 'q':
             Serial.println("Right Wheel Forward");
             wheelRfwd();
-            Serial.flush();
             break;
 
           case 'a':
             Serial.println("Right Wheel Reverse");
             wheelRrev();
-            Serial.flush();
             break;
 
           case 'e':
             Serial.println("Left Wheel Forward");
             wheelLfwd();
-            Serial.flush();
             break;
 
           case 'd':
             Serial.println("Left Wheel Reverse");
             wheelLrev();
-            Serial.flush();
             break;
 
           case '0':
@@ -303,7 +295,6 @@ void loop() {
             digitalWrite(LEDpin, HIGH);
             LEDMillis = millis();
             LEDstate = true;
-            Serial.flush();
             break;
 
           case '1':
@@ -311,7 +302,6 @@ void loop() {
             digitalWrite(motorPin1, HIGH);
             BmotorMillis = millis();
             BmotorState = true;
-            Serial.flush();
             break;
 
           case '3':
@@ -321,7 +311,6 @@ void loop() {
               BmotorMillis = millis();
               BmotorState = true;
             }
-            Serial.flush();
             break;
 
           case '7':
@@ -329,7 +318,6 @@ void loop() {
             digitalWrite(motorPin3, HIGH);
             m1Millis = millis();
             m1State = true;
-            Serial.flush();
             break;
 
           case '4':
@@ -339,7 +327,6 @@ void loop() {
               m1Millis = millis();
               m1State = true;
             }
-            Serial.flush();
             break;
 
           case '9':
@@ -347,7 +334,6 @@ void loop() {
             digitalWrite(motorPin5, HIGH);
             m2Millis = millis();
             m2State = true;
-            Serial.flush();
             break;
 
           case '6':
@@ -357,7 +343,6 @@ void loop() {
               m2Millis = millis();
               m2State = true;
             }
-            Serial.flush();
             break;
 
           case '8':
@@ -365,7 +350,6 @@ void loop() {
             digitalWrite(motorPin7, HIGH);
             m3Millis = millis();
             m3State = true;
-            Serial.flush();
             break;
 
           case '5':
@@ -375,45 +359,37 @@ void loop() {
               m3Millis = millis();
               m3State = true;
             }
-            Serial.flush();
             break;
 
           case '+':
             Serial.println("Gripper, Forward.");
             gripfwd();
-            Serial.flush();
             break;
 
           case '-':
             Serial.println("Gripper, Reverse.");
             griprev();
-            Serial.flush();
             break;
 
           case 'z':
             Serial.println("spin, Left.");
             spinLeft();
-            Serial.flush();
             break;
           case 'c':
             Serial.println("spin, Right.");
             spinRight();
-            Serial.flush();
             break;
 
           case '2':
             spdUp();
-            Serial.flush();
             break;
 
           case '.':
             spdDown();
-            Serial.flush();
             break;
 
           case 'x':
             spin180r();
-            Serial.flush();
             break;
           default:
 
