@@ -1,40 +1,38 @@
-// a string to hold incoming data
 String serialString1 = "";
-// whether the string is complete
 boolean stringComplete = false;
 //Base Motor
-const int motorPin1 = 2;
-const int motorPin2 = 3;
-bool BmotorState = false;
+const int BmotorFwd = 2;
+const int BmotorRev = 3;
+int BmotorState = 0;
 unsigned long BmotorMillis;
 //Joint Motor 1
-const int motorPin3 = 4;
-const int motorPin4 = 5;
-bool m1State = false;
+const int m1Fwd = 4;
+const int m1Rev = 5;
+int m1State = 0;
 unsigned long m1Millis;
 //Joint Motor 2
-const int motorPin5 = 6;
-const int motorPin6 = 7;
-bool m2State = false;
+const int m2Fwd = 6;
+const int m2Rev = 7;
+int m2State = 0;
 unsigned long m2Millis;
 //Wrist Motor 3
-const int motorPin7 = 8;
-const int motorPin8 = 9;
-bool m3State = false;
+const int m3Fwd = 8;
+const int m3Rev = 9;
+int m3State = 0;
 unsigned long m3Millis;
 //Gripper Motor 4
-const int motorPin9 = 10;
-const int motorPin10 = 11;
+const int m4Fwd = 10;
+const int m4Rev = 11;
 //Left Wheel Motor
-const int motorPin11 = 22;
-const int motorPin12 = 23;
+const int leftWmotorFwd = 22;
+const int leftWmotorRev = 23;
 //Right Wheel Motor
-const int motorPin13  = 24;
-const int motorPin14  = 25;
+const int rightWmotorFwd  = 24;
+const int rightWmotorRev  = 25;
 
 //LED
 const int LEDpin  = 12;
-bool LEDstate = false;
+int LEDstate = 0;
 unsigned long LEDMillis;
 int BlinkInterval = 30;
 
@@ -58,123 +56,123 @@ void Blink() {
 
 }
 void basefwd() {
-  digitalWrite(motorPin1, HIGH);
+  digitalWrite(BmotorFwd, HIGH);
   delay(burstTime);
-  digitalWrite(motorPin1, LOW);
+  digitalWrite(BmotorFwd, LOW);
 };
 
 void baserev() {
-  digitalWrite(motorPin2, HIGH);
+  digitalWrite(BmotorRev, HIGH);
   delay(burstTime);
-  digitalWrite(motorPin2, LOW);
+  digitalWrite(BmotorRev, LOW);
 };
 
 void m1rev() {
-  digitalWrite(motorPin3, HIGH);
+  digitalWrite(m1Fwd, HIGH);
   delay(burstTime);
-  digitalWrite(motorPin3, LOW);
+  digitalWrite(m1Fwd, LOW);
 };
 
 void m1fwd() {
-  digitalWrite(motorPin4, HIGH);
+  digitalWrite(m1Rev, HIGH);
   delay(burstTime);
-  digitalWrite(motorPin4, LOW);
+  digitalWrite(m1Rev, LOW);
 };
 
 void m2fwd() {
-  digitalWrite(motorPin5, HIGH);
+  digitalWrite(m2Fwd, HIGH);
   delay(burstTime);
-  digitalWrite(motorPin5, LOW);
+  digitalWrite(m2Fwd, LOW);
 };
 
 void m2rev() {
-  digitalWrite(motorPin6, HIGH);
+  digitalWrite(m2Rev, HIGH);
   delay(burstTime);
-  digitalWrite(motorPin6, LOW);
+  digitalWrite(m2Rev, LOW);
 };
 
 void m3rev() {
-  digitalWrite(motorPin7, HIGH);
+  digitalWrite(m3Fwd, HIGH);
   delay(burstTime);
-  digitalWrite(motorPin7, LOW);
+  digitalWrite(m3Fwd, LOW);
 }
 
 void m3fwd() {
-  digitalWrite(motorPin8, HIGH);
+  digitalWrite(m3Rev, HIGH);
   delay(burstTime);
-  digitalWrite(motorPin8, LOW);
+  digitalWrite(m3Rev, LOW);
 }
 void griprev() {
-  digitalWrite(motorPin9, HIGH);
+  digitalWrite(m4Fwd, HIGH);
   delay(gripTime);
-  digitalWrite(motorPin9, LOW);
+  digitalWrite(m4Fwd, LOW);
 }
 void gripfwd() {
-  digitalWrite(motorPin10, HIGH);
+  digitalWrite(m4Rev, HIGH);
   delay(gripTime);
-  digitalWrite(motorPin10, LOW);
+  digitalWrite(m4Rev, LOW);
 }
 void wheelRfwd() {
-  digitalWrite(motorPin11, HIGH);
+  digitalWrite(leftWmotorFwd, HIGH);
   delay(burstTime);
-  digitalWrite(motorPin11, LOW);
+  digitalWrite(leftWmotorFwd, LOW);
 }
 void wheelRrev() {
-  digitalWrite(motorPin12, HIGH);
+  digitalWrite(leftWmotorRev, HIGH);
   delay(burstTime);
-  digitalWrite(motorPin12, LOW);
+  digitalWrite(leftWmotorRev, LOW);
 }
 void wheelLfwd() {
-  digitalWrite(motorPin13, HIGH);
+  digitalWrite(rightWmotorFwd, HIGH);
   delay(burstTime);
-  digitalWrite(motorPin13, LOW);
+  digitalWrite(rightWmotorFwd, LOW);
 }
 void wheelLrev() {
-  digitalWrite(motorPin14, HIGH);
+  digitalWrite(rightWmotorRev, HIGH);
   delay(burstTime);
-  digitalWrite(motorPin14, LOW);
+  digitalWrite(rightWmotorRev, LOW);
 }
 void fullfwd() {
-  digitalWrite(motorPin11, HIGH);
-  digitalWrite(motorPin13, HIGH);
+  digitalWrite(leftWmotorFwd, HIGH);
+  digitalWrite(rightWmotorFwd, HIGH);
   delay(burstTime);
-  digitalWrite(motorPin11, LOW);
-  digitalWrite(motorPin13, LOW);
+  digitalWrite(leftWmotorFwd, LOW);
+  digitalWrite(rightWmotorFwd, LOW);
 }
 void fullrev() {
-  digitalWrite(motorPin12, HIGH);
-  digitalWrite(motorPin14, HIGH);
+  digitalWrite(leftWmotorRev, HIGH);
+  digitalWrite(rightWmotorRev, HIGH);
   delay(burstTime);
-  digitalWrite(motorPin12, LOW);
-  digitalWrite(motorPin14, LOW);
+  digitalWrite(leftWmotorRev, LOW);
+  digitalWrite(rightWmotorRev, LOW);
 }
 void spinLeft() {
-  digitalWrite(motorPin11, HIGH);
-  digitalWrite(motorPin14, HIGH);
+  digitalWrite(leftWmotorFwd, HIGH);
+  digitalWrite(rightWmotorRev, HIGH);
   delay(burstTime);
-  digitalWrite(motorPin11, LOW);
-  digitalWrite(motorPin14, LOW);
+  digitalWrite(leftWmotorFwd, LOW);
+  digitalWrite(rightWmotorRev, LOW);
 }
 void spinRight() {
-  digitalWrite(motorPin12, HIGH);
-  digitalWrite(motorPin13, HIGH);
+  digitalWrite(leftWmotorRev, HIGH);
+  digitalWrite(rightWmotorFwd, HIGH);
   delay(burstTime);
-  digitalWrite(motorPin12, LOW);
-  digitalWrite(motorPin13, LOW);
+  digitalWrite(leftWmotorRev, LOW);
+  digitalWrite(rightWmotorFwd, LOW);
 }
 void spin180r() {
-  digitalWrite(motorPin12, HIGH);
-  digitalWrite(motorPin13, HIGH);
+  digitalWrite(leftWmotorRev, HIGH);
+  digitalWrite(rightWmotorFwd, HIGH);
   delay(4750);
-  digitalWrite(motorPin12, LOW);
-  digitalWrite(motorPin13, LOW);
+  digitalWrite(leftWmotorRev, LOW);
+  digitalWrite(rightWmotorFwd, LOW);
 }
 void spin180l() {
-  digitalWrite(motorPin11, HIGH);
-  digitalWrite(motorPin14, HIGH);
+  digitalWrite(leftWmotorFwd, HIGH);
+  digitalWrite(rightWmotorRev, HIGH);
   delay(4750);
-  digitalWrite(motorPin11, LOW);
-  digitalWrite(motorPin14, LOW);
+  digitalWrite(leftWmotorFwd, LOW);
+  digitalWrite(rightWmotorRev, LOW);
 }
 void spdUp() {
   Serial.print("Burst time was: ");
@@ -206,7 +204,6 @@ void testSeq() {
   spinLeft();
   spinRight();
   spin180l();
-  spin180r();
   wheelRfwd();
   wheelRrev();
   wheelLfwd();
@@ -215,7 +212,6 @@ void testSeq() {
   fullrev();
   digitalWrite(LEDpin, LOW);
 }
-
 //=======================================================================================================================================
 void setup() {
 
@@ -223,20 +219,20 @@ void setup() {
 
   Serial.begin(9600);
 
-  pinMode(motorPin1, OUTPUT);
-  pinMode(motorPin2, OUTPUT);
-  pinMode(motorPin3, OUTPUT);
-  pinMode(motorPin4, OUTPUT);
-  pinMode(motorPin5, OUTPUT);
-  pinMode(motorPin6, OUTPUT);
-  pinMode(motorPin7, OUTPUT);
-  pinMode(motorPin8, OUTPUT);
-  pinMode(motorPin9, OUTPUT);
-  pinMode(motorPin10, OUTPUT);
-  pinMode(motorPin11, OUTPUT);
-  pinMode(motorPin12, OUTPUT);
-  pinMode(motorPin13, OUTPUT);
-  pinMode(motorPin14, OUTPUT);
+  pinMode(BmotorFwd, OUTPUT);
+  pinMode(BmotorRev, OUTPUT);
+  pinMode(m1Fwd, OUTPUT);
+  pinMode(m1Rev, OUTPUT);
+  pinMode(m2Fwd, OUTPUT);
+  pinMode(m2Rev, OUTPUT);
+  pinMode(m3Fwd, OUTPUT);
+  pinMode(m3Rev, OUTPUT);
+  pinMode(m4Fwd, OUTPUT);
+  pinMode(m4Rev, OUTPUT);
+  pinMode(leftWmotorFwd, OUTPUT);
+  pinMode(leftWmotorRev, OUTPUT);
+  pinMode(rightWmotorFwd, OUTPUT);
+  pinMode(rightWmotorRev, OUTPUT);
 
   pinMode(LEDpin, OUTPUT);
 
@@ -249,62 +245,208 @@ void setup() {
 //=======================================================================================================================================
 void serialEvent() {
   while (Serial.available() > 0) {
-
     char inChar = (char)Serial.read();
-    serialString1 += inChar;
-
     if (inChar == '\n') {
       stringComplete = true;
     }
+    serialString1 += inChar;
+    limiter();
   }
 }
 //=======================================================================================================================================
 void loop() {
+  //Serial.print('.');
   if (stringComplete) {
-    Serial.println(serialString1);
+    //Serial.println(serialString1);
+    commandCheck();
+    limiter();
+    serialString1 = "";
+    stringComplete = false;
+  }
+  limiter();
+}
 
+//=======================================================================================================================================
+void limiter() {
+
+  unsigned long currentMillis = millis();
+
+  if ((LEDstate < 1) && (currentMillis - LEDMillis >= burstTime)) {
+    digitalWrite(LEDpin, LOW);
+    LEDMillis = millis();
+  }
+  if ((LEDstate > 0) && (currentMillis - LEDMillis >= burstTime)) {
+    LEDstate--;
+    LEDMillis = millis();
+  }
+  if ((BmotorState < 1) && (currentMillis - BmotorMillis >= burstTime)) {
+    digitalWrite(BmotorFwd, LOW);
+    digitalWrite(BmotorRev, LOW);
+    BmotorMillis =  millis();
+  }
+    if ((BmotorState > 0) && (currentMillis - BmotorMillis >= burstTime)) {
+    BmotorState--;
+    BmotorMillis =  millis();
+  }
+  if ((m1State == 1) && (currentMillis - m1Millis >= burstTime)) {
+    digitalWrite(m1Fwd, LOW);
+    digitalWrite(m1Rev, LOW);
+    m1Millis =  millis();
+    m1State = 0;
+  }
+  if ((m2State == true) && (currentMillis - m2Millis >= burstTime)) {
+    digitalWrite(m2Fwd, LOW);
+    digitalWrite(m2Rev, LOW);
+    m2Millis =  millis();
+    m2State = 0;
+  }
+  if ((m3State == true) && (currentMillis - m3Millis >= burstTime)) {
+    digitalWrite(m3Fwd, LOW);
+    digitalWrite(m3Rev, LOW);
+    m3Millis =  millis();
+    m3State = 0;
+  }
+}
+//=========================================================================================
+void commandCheck() {
+  for (int x = 0; x < commandQty; x++) {
     if (serialString1 == "t\n")
     {
       Serial.println("Test Sequence Initiated");
       testSeq();
     }
-    serialString1 = "";
-    stringComplete = false;
-  }
-}
-
-//=======================================================================================================================================
-void limiter() {
-  unsigned long currentMillis = millis();
-
-
-  if ((LEDstate == true) && (currentMillis - LEDMillis >= BlinkInterval)) {
-    digitalWrite(LEDpin, LOW);
-    LEDMillis = currentMillis;
-    LEDstate = false;
-  }
-  if ((BmotorState == true) && (currentMillis - BmotorMillis >= burstTime)) {
-    digitalWrite(motorPin1, LOW);
-    digitalWrite(motorPin2, LOW);
-    BmotorMillis = currentMillis;
-    BmotorState = false;
-  }
-  if ((m1State == true) && (currentMillis - m1Millis >= burstTime)) {
-    digitalWrite(motorPin3, LOW);
-    digitalWrite(motorPin4, LOW);
-    m1Millis = currentMillis;
-    m1State = false;
-  }
-  if ((m2State == true) && (currentMillis - m2Millis >= burstTime)) {
-    digitalWrite(motorPin5, LOW);
-    digitalWrite(motorPin6, LOW);
-    m2Millis = currentMillis;
-    m2State = false;
-  }
-  if ((m3State == true) && (currentMillis - m3Millis >= burstTime)) {
-    digitalWrite(motorPin7, LOW);
-    digitalWrite(motorPin8, LOW);
-    m3Millis = currentMillis;
-    m3State = false;
+    else if (serialString1[x] == 'w')
+    {
+      Serial.println("Full Forward");
+      fullfwd();
+    }
+    else if (serialString1[x] == 's')
+    {
+      Serial.println("Full Reverse");
+      fullrev();
+    }
+    else if (serialString1[x] == 'q')
+    {
+      Serial.println("Right Wheel Forward");
+      wheelRfwd();
+    }
+    else if (serialString1[x] == 'a')
+    {
+      Serial.println("Right Wheel Reverse");
+      wheelRrev();
+    }
+    else if (serialString1[x] == 'e')
+    {
+      Serial.println("Left Wheel Forward");
+      wheelLfwd();
+    }
+    else if (serialString1[x] == 'd')
+    {
+      Serial.println("Left Wheel Reverse");
+      wheelLrev();
+    }
+    else if (serialString1[x] == '0')
+    {
+      Serial.println("Blink ");
+      digitalWrite(LEDpin, HIGH);
+      LEDMillis = millis();
+      LEDstate++;
+    }
+    else if (serialString1[x] == '1')
+    {
+      Serial.println("Rotating base, Left.");
+      digitalWrite(BmotorFwd, HIGH);
+      BmotorMillis = millis();
+      BmotorState++;
+    }
+    else if (serialString1[x] == '3')
+    {
+      Serial.println("Rotating base, Right");
+      if (BmotorState == 0) {
+        digitalWrite(BmotorRev, HIGH);
+        BmotorMillis = millis();
+        BmotorState++;
+      }
+    }
+    else if (serialString1[x] == '7')
+    {
+      Serial.println("Motor 1, Forward.");
+      digitalWrite(m1Fwd, HIGH);
+      m1Millis = millis();
+      m1State = 1;
+    }
+    else if (serialString1[x] == '4')
+    {
+      Serial.println("Motor 1, Reverse.");
+      if (m1State == false) {
+        digitalWrite(m1Rev, HIGH);
+        m1Millis = millis();
+        m1State = 1;
+      }
+    }
+    else if (serialString1[x] == '9')
+    {
+      Serial.println("Motor 2, Forward.");
+      digitalWrite(m2Fwd, HIGH);
+      m2Millis = millis();
+      m2State = 1;
+    }
+    else if (serialString1[x] == '6')
+    {
+      Serial.println("Motor 2, Reverse.");
+      if (m2State == false) {
+        digitalWrite(m2Rev, HIGH);
+        m2Millis = millis();
+        m2State = 1;
+      }
+    }
+    else if (serialString1[x] == '8')
+    {
+      Serial.println("Motor 3, Forward.");
+      digitalWrite(m3Fwd, HIGH);
+      m3Millis = millis();
+      m3State = 1;
+    }
+    else if (serialString1[x] == '5')
+    {
+      Serial.println("Motor 3, Reverse.");
+      if (m3State == false) {
+        digitalWrite(m3Rev, HIGH);
+        m3Millis = millis();
+        m3State = 1;
+      }
+    }
+    else if (serialString1[x] == '+')
+    {
+      Serial.println("Gripper, Forward.");
+      gripfwd();
+    }
+    else if (serialString1[x] == '-')
+    {
+      Serial.println("Gripper, Reverse.");
+      griprev();
+    }
+    else if (serialString1[x] == '2')
+    {
+      spdUp();
+    }
+    else if (serialString1[x] == '.')
+    {
+      spdDown();
+    }
+    else if (serialString1[x] == 'z')
+    {
+      Serial.println("spin, Left.");
+      spinLeft();
+    }
+    else if (serialString1[x] == 'c')
+    {
+      Serial.println("spin, Right.");
+      spinRight();
+    }
+    else if (serialString1[x] == 'x')
+    {
+      spin180r();
+    }
   }
 }
