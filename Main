@@ -1,3 +1,4 @@
+//Serial is input to serialString, stringComplete true when \n received
 String serialString1 = "";
 boolean stringComplete = false;
 //Base Motor
@@ -50,7 +51,7 @@ int BlinkInterval = 30;
 int gripPos = 0;
 int gripTime = 850;
 //Motor Run time
-int burstTime  = 750;
+int burstTime  = 1000;
 int mStep = 250;
 //Commands
 int Command;
@@ -85,23 +86,33 @@ void setup() {
   while (! Serial) {
     ;
   }
-  Serial.println("Arm' Control."); delay(2000);
+//-----Splash
+  Serial.println("Arm' Control."); delay(1500);
   Serial.println("Ready.");
 }
 //=======================================================================================================================================
 void serialEvent() {
+//Serial catcher. If there's serial available it will be added to a string, until
+//a newline is received. After a newline the string state will be active. Then
+//the string is complete and loop() begins. I have included a limiter() as a 
+//precaution.
   while (Serial.available() > 0) {
     char inChar = (char)Serial.read();
     if (inChar == '\n') {
       stringComplete = true;
     }
     else
-    serialString1 += inChar;
+      serialString1 += inChar;
     limiter();
   }
 }
 //=======================================================================================================================================
 void loop() {
+//This will assess a string passed from the serial.event(). First the string is
+//printed. The commandCheck() will compare it to a list of know strings, if a
+//match is found a command will be performed. The limiter within the 'if' is a 
+//precaution. After the string and limiter have been used the string contents are 
+//cleared and state deactivated. If nothing else the loop with run the limiter.
   if (stringComplete) {
     Serial.print(serialString1);
     Serial.println(": ");
@@ -114,168 +125,151 @@ void loop() {
 }
 //=======================================================================================================================================
 void limiter() {
-  
+//This function will check for active states and deactivate them if a 
+//predetermined time has passed. Some states can be stacked, if the time for a
+//stacked state is reached no deactivation is perfomed and the stack is reduced.
+
   unsigned long currentMillis = millis();
 
-//------Time active check for LED. Stack
-  if ((LEDstate > 1) && (currentMillis - LEDMillis >= burstTime)) {
-    LEDstate--;
-    LEDMillis = millis();
-    Serial.println("Tick.");
-  }
-//------Time active check for LED. End
-  if ((LEDstate == 1) && (currentMillis - LEDMillis >= burstTime)) {
-    digitalWrite(LEDpin, LOW);
-    LEDstate--;
-    Serial.println("Stop.");
-  }
-//------Time active check for Base Motor, Forward. Stack
+  //------Time active check for Base Motor, Forward. Stack
   if ((BmotorfState > 1) && (currentMillis - BmotorMillis >= burstTime)) {
     BmotorfState--;
     BmotorMillis =  millis();
-    Serial.println("Tick.");
+    Serial.println("Tick, Base Motor Forward.");
   }
-//------Time active check for Base Motor, Forward. End
+  //------Time active check for Base Motor, Forward. End
   if ((BmotorfState == 1) && (currentMillis - BmotorMillis >= burstTime)) {
     digitalWrite(BmotorFwd, LOW);
-    digitalWrite(BmotorRev, LOW);
     BmotorfState--;
-    Serial.println("Stop.");
+    Serial.println("Stopped, Base Motor Forward.");
   }
-//------Time active check for Base Motor, Reverse. Stack
+  //------Time active check for Base Motor, Reverse. Stack
   if ((BmotorrState > 1) && (currentMillis - BmotorMillis >= burstTime)) {
     BmotorrState--;
     BmotorMillis =  millis();
-    Serial.println("Tick.");
+    Serial.println("Tick, Base Motor Reverse.");
   }
-//------Time active check for Base Motor, Reverse. End
+  //------Time active check for Base Motor, Reverse. End
   if ((BmotorrState == 1) && (currentMillis - BmotorMillis >= burstTime)) {
-    digitalWrite(BmotorFwd, LOW);
     digitalWrite(BmotorRev, LOW);
     BmotorrState--;
-    Serial.println("Stop.");
+    Serial.println("Stopped, Base Motor Reverse.");
   }
-//------Time active check for Motor 1, Forward. Stack
+  //------Time active check for Motor 1, Forward. Stack
   if ((m1fState > 1) && (currentMillis - m1Millis >= burstTime)) {
     m1fState--;
     m1Millis =  millis();
-    Serial.println("Tick.");
+    Serial.println("Tick, Motor 1 Forward.");
   }
-//------Time active check for Motor 1, Forward. End
+  //------Time active check for Motor 1, Forward. End
   if ((m1fState == 1) && (currentMillis - m1Millis >= burstTime)) {
     digitalWrite(m1Fwd, LOW);
-    digitalWrite(m1Rev, LOW);
     m1fState--;
-    Serial.println("Stop.");
+    Serial.println("Stopped, Motor 1 Forward.");
   }
-//------Time active check for Motor 1, Reverse. Stack
+  //------Time active check for Motor 1, Reverse. Stack
   if ((m1rState > 1) && (currentMillis - m1Millis >= burstTime)) {
     m1rState--;
     m1Millis =  millis();
-    Serial.println("Tick.");
+    Serial.println("Tick, Motor 1 Reverse.");
   }
-//------Time active check for Motor 1, Reverse. End
+  //------Time active check for Motor 1, Reverse. End
   if ((m1rState == 1) && (currentMillis - m1Millis >= burstTime)) {
-    digitalWrite(m1Fwd, LOW);
     digitalWrite(m1Rev, LOW);
     m1rState--;
-    Serial.println("Stop.");
+    Serial.println("Stopped, Motor 1 Reverse.");
   }
-//------Time active check for Motor 2, Forward. Stack
+  //------Time active check for Motor 2, Forward. Stack
   if ((m2fState > 1) && (currentMillis - m2Millis >= burstTime)) {
     m2fState--;
     m2Millis =  millis();
-    Serial.println("Tick.");
+    Serial.println("Tick, Motor 2 Forward.");
   }
-//------Time active check for Motor 2, Forward. End
+  //------Time active check for Motor 2, Forward. End
   if ((m2fState == 1) && (currentMillis - m2Millis >= burstTime)) {
     digitalWrite(m2Fwd, LOW);
-    digitalWrite(m2Rev, LOW);
     m2fState--;
-    Serial.println("Stop.");
+    Serial.println("Stopped, Motor 2 Forward.");
   }
-//------Time active check for Motor 2, Reverse. Stack
+  //------Time active check for Motor 2, Reverse. Stack
   if ((m2rState > 1) && (currentMillis - m2Millis >= burstTime)) {
     m2rState--;
     m2Millis =  millis();
-    Serial.println("Tick.");
+    Serial.println("Tick, Motor 2 Reverse.");
   }
-//------Time active check for Motor 2, Reverse. End
+  //------Time active check for Motor 2, Reverse. End
   if ((m2rState == 1) && (currentMillis - m2Millis >= burstTime)) {
-    digitalWrite(m2Fwd, LOW);
     digitalWrite(m2Rev, LOW);
     m2rState--;
-    Serial.println("Stop.");
+    Serial.println("Stopped, Motor 2 Reverse.");
   }
-//------Time active check for Motor 3, Forward. Stack
+  //------Time active check for Motor 3, Forward. Stack
   if ((m3fState > 1) && (currentMillis - m3Millis >= burstTime)) {
     m3fState--;
     m3Millis =  millis();
-    Serial.println("Tick.");
+    Serial.println("Tick, Motor 3 Forward.");
   }
-//------Time active check for Motor 3, Forward. End
+  //------Time active check for Motor 3, Forward. End
   if ((m3fState == 1) && (currentMillis - m3Millis >= burstTime)) {
     digitalWrite(m3Fwd, LOW);
-    digitalWrite(m3Rev, LOW);
     m3fState--;
-    Serial.println("Stop.");
+    Serial.println("Stopped, Motor 3 Forward.");
   }
-//------Time active check for Motor 3, Reverse. Stack
+  //------Time active check for Motor 3, Reverse. Stack
   if ((m3rState > 1) && (currentMillis - m3Millis >= burstTime)) {
     m3rState--;
     m3Millis =  millis();
-    Serial.println("Tick.");
+    Serial.println("Tick, Motor 3 Reverse.");
   }
-//------Time active check for Motor 3, Reverse. End
+  //------Time active check for Motor 3, Reverse. End
   if ((m3rState == 1) && (currentMillis - m3Millis >= burstTime)) {
-    digitalWrite(m3Fwd, LOW);
     digitalWrite(m3Rev, LOW);
     m3rState--;
-    Serial.println("Stop.");
+    Serial.println("Stopped, Motor 3 Reverse.");
   }
-//------Time active check for Left Wheel Motor, Forward. Stack
+  //------Time active check for Left Wheel Motor, Forward. Stack
   if ((lWmFState > 1) && (currentMillis - lWmFMillis >= burstTime)) {
     lWmFState--;
     lWmFMillis =  millis();
-    Serial.println("Tick.");
+    Serial.println("Tick, Left Wheel Motor Forward.");
   }
-//------Time active check for Left Wheel Motor, Forward. End
+  //------Time active check for Left Wheel Motor, Forward. End
   if ((lWmFState == 1) && (currentMillis - lWmFMillis >= burstTime)) {
     digitalWrite(leftWmotorFwd, LOW);
     lWmFState--;
     Serial.println("Stopped, Left Wheel Motor Forward.");
   }
-//------Time active check for Right Wheel Motor, Forward. Stack
+  //------Time active check for Right Wheel Motor, Forward. Stack
   if ((rWmFState > 1) && (currentMillis - rWmFMillis >= burstTime)) {
     rWmFState--;
     rWmFMillis =  millis();
-    Serial.println("Tick.");
+    Serial.println("Tick, Right Wheel Motor Forward.");
   }
-//------Time active check for Right Wheel Motor, Forward. End
+  //------Time active check for Right Wheel Motor, Forward. End
   if ((rWmFState == 1) && (currentMillis - rWmFMillis >= burstTime)) {
     digitalWrite(rightWmotorFwd, LOW);
     rWmFState--;
     Serial.println("Stopped, Right Wheel Motor Forward.");
   }
-//------Time active check for Left Wheel Motor, Reverse. Stack
+  //------Time active check for Left Wheel Motor, Reverse. Stack
   if ((lWmRState > 1) && (currentMillis - lWmRMillis >= burstTime)) {
     lWmRState--;
     lWmRMillis =  millis();
-    Serial.println("Tick.");
+    Serial.println("Tick, Left Wheel Motor Reverse.");
   }
-//------Time active check for Left Wheel Motor, Reverse. End
+  //------Time active check for Left Wheel Motor, Reverse. End
   if ((lWmRState == 1) && (currentMillis - lWmRMillis >= burstTime)) {
     digitalWrite(leftWmotorRev, LOW);
     lWmRState--;
     Serial.println("Stopped, Left Wheel Motor Reverse.");
   }
-//------Time active check for Right Wheel Motor, Reverse. Stack
+  //------Time active check for Right Wheel Motor, Reverse. Stack
   if ((rWmRState > 1) && (currentMillis - rWmRMillis >= burstTime)) {
     rWmRState--;
     rWmRMillis =  millis();
-    Serial.println("Tick.");
+    Serial.println("Tick, Right Wheel Motor Reverse.");
   }
-//------Time active check for Right Wheel Motor, Reverse. End
+  //------Time active check for Right Wheel Motor, Reverse. End
   if ((rWmRState == 1) && (currentMillis - rWmRMillis >= burstTime)) {
     digitalWrite(rightWmotorRev, LOW);
     rWmRState--;
@@ -285,7 +279,7 @@ void limiter() {
 //=========================================================================================
 void commandCheck() {
   for (int x = 0; x < commandQty; x++) {
-    if (serialString1 == "state\n")
+    if (serialString1 == "state")
     {
       Serial.print(BmotorfState);
       Serial.print(BmotorrState);
@@ -347,34 +341,43 @@ void commandCheck() {
     else if (serialString1[x] == 'e')
     {
       if (lWmRState == 0) {
-      Serial.println("Command: Left Wheel Forward");
-      digitalWrite(leftWmotorFwd, HIGH);
-      lWmFMillis = millis();
-      lWmFState++;
-    }}
+        Serial.println("Command: Left Wheel Forward");
+        digitalWrite(leftWmotorFwd, HIGH);
+        lWmFMillis = millis();
+        lWmFState++;
+      }
+    }
     else if (serialString1[x] == 'd')
     {
       if (lWmFState == 0) {
-      Serial.println("Command: Left Wheel Reverse");
-      digitalWrite(leftWmotorRev, HIGH);
-      lWmRMillis = millis();
-      lWmRState++;
-    }}
+        Serial.println("Command: Left Wheel Reverse");
+        digitalWrite(leftWmotorRev, HIGH);
+        lWmRMillis = millis();
+        lWmRState++;
+      }
+    }
     else if (serialString1[x] == '0')
     {
-      Serial.println("Blink ");
-      digitalWrite(LEDpin, HIGH);
-      LEDMillis = millis();
-      LEDstate++;
+      if (LEDstate == 0) {
+        Serial.println("Spotlight On. ");
+        digitalWrite(LEDpin, HIGH);
+        LEDstate = 1;
+      }
+      else if (LEDstate == 1) {
+        Serial.println("Spotlight Off. ");
+        digitalWrite(LEDpin, LOW);
+        LEDstate = 0;
+    }
     }
     else if (serialString1[x] == '1')
     {
       if (BmotorrState == 0) {
-      Serial.println("Command: Rotating base, Left.");
-      digitalWrite(BmotorFwd, HIGH);
-      BmotorMillis = millis();
-      BmotorfState++;
-    }}
+        Serial.println("Command: Rotating base, Left");
+        digitalWrite(BmotorFwd, HIGH);
+        BmotorMillis = millis();
+        BmotorfState++;
+      }
+    }
     else if (serialString1[x] == '3')
     {
       if (BmotorfState == 0) {
@@ -387,11 +390,12 @@ void commandCheck() {
     else if (serialString1[x] == '7')
     {
       if (m1rState == 0) {
-      Serial.println("Command: Motor 1, Forward.");
-      digitalWrite(m1Fwd, HIGH);
-      m1Millis = millis();
-      m1fState++;
-    }}
+        Serial.println("Command: Motor 1, Forward.");
+        digitalWrite(m1Fwd, HIGH);
+        m1Millis = millis();
+        m1fState++;
+      }
+    }
     else if (serialString1[x] == '4')
     {
       if (m1fState == 0) {
@@ -404,11 +408,12 @@ void commandCheck() {
     else if (serialString1[x] == '9')
     {
       if (m2rState == 0) {
-      Serial.println("Command: Motor 2, Forward.");
-      digitalWrite(m2Fwd, HIGH);
-      m2Millis = millis();
-      m2fState++;
-    }}
+        Serial.println("Command: Motor 2, Forward.");
+        digitalWrite(m2Fwd, HIGH);
+        m2Millis = millis();
+        m2fState++;
+      }
+    }
     else if (serialString1[x] == '6')
     {
       if (m2fState == 0) {
@@ -477,25 +482,27 @@ void commandCheck() {
     else if (serialString1[x] == 'z')
     {
       if ((lWmRState == 0) && (rWmFState == 0)) {
-      Serial.println("Command: spin, Left.");
-      digitalWrite(leftWmotorFwd, HIGH);
-      digitalWrite(rightWmotorRev, HIGH);
-      lWmFMillis = millis();
-      rWmRMillis = millis();
-      lWmFState++;
-      rWmRState++;
-    }}
+        Serial.println("Command: spin, Left.");
+        digitalWrite(leftWmotorFwd, HIGH);
+        digitalWrite(rightWmotorRev, HIGH);
+        lWmFMillis = millis();
+        rWmRMillis = millis();
+        lWmFState++;
+        rWmRState++;
+      }
+    }
     else if (serialString1[x] == 'c')
     {
       if ((lWmRState == 0) && (rWmFState == 0)) {
-      Serial.println("Command: spin, Right.");
-      digitalWrite(leftWmotorRev, HIGH);
-      digitalWrite(rightWmotorFwd, HIGH);
-      lWmRMillis = millis();
-      rWmFMillis = millis();
-      lWmRState++;
-      rWmFState++;
-    }}
+        Serial.println("Command: spin, Right.");
+        digitalWrite(leftWmotorRev, HIGH);
+        digitalWrite(rightWmotorFwd, HIGH);
+        lWmRMillis = millis();
+        rWmFMillis = millis();
+        lWmRState++;
+        rWmFState++;
+      }
+    }
     else if (serialString1[x] == 'x')
     {
       Serial.println("Command: spin, 180.");
