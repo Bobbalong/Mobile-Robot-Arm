@@ -1,0 +1,79 @@
+from Tkinter import *
+import RPi.GPIO as GPIO
+import time
+
+# Pin Definitons:
+ledPin = 23 # Broadcom pin 23 (P1 pin 16)
+bmfPin = 24
+bmrPin = 25
+
+# Pin Setup:
+GPIO.setmode(GPIO.BCM) # Broadcom pin-numbering scheme
+GPIO.setup(ledPin, GPIO.OUT) # LED pin set as output
+GPIO.setup(bmfPin, GPIO.OUT)
+GPIO.setup(bmrPin, GPIO.OUT)
+
+# Initial state for LEDs:
+GPIO.output(ledPin, GPIO.LOW)
+
+LEDstate = 0
+bmfState = 0
+bmrState = 0
+
+def close_window():
+    GPIO.cleanup()
+    raise SystemExit
+
+def spotlight():
+  global LEDstate
+  if LEDstate == 0:
+    GPIO.output(ledPin, GPIO.HIGH)
+    LEDstate = 1
+  else:
+    GPIO.output(ledPin, GPIO.LOW)
+    LEDstate = 0
+
+def base_motor_fwd():
+  global bmfState
+  if bmfState == 0:
+    GPIO.output(bmfPin, GPIO.HIGH)
+    bmfState = 1
+  else:
+    GPIO.output(bmfPin, GPIO.LOW)
+    bmfState = 0
+
+def base_motor_rev():
+  global bmrState
+  if bmrState == 0:
+    GPIO.output(bmrPin, GPIO.HIGH)
+    bmrState = 1
+  else:
+    GPIO.output(bmrPin, GPIO.LOW)
+    bmrState = 0
+
+class MyClass:
+
+  def __init__(self, master):
+
+    sec = Frame(master)
+    sec.pack()
+    bottomframe = Frame(master)
+    bottomframe.pack( side = BOTTOM )
+
+    button1 = Button(sec, text="QUIT", fg="red", command=close_window)
+    button1.pack(side=LEFT)
+
+    button2 = Button(sec, text="Spotlight", command=spotlight)
+    button2.pack(side=LEFT)
+
+    button3 = Button(sec, text="Base Motor Forward", command=base_motor_fwd)
+    button3.pack(side=RIGHT)
+
+    button4 = Button(bottomframe, text="Base Motor Reverse", command=base_motor_rev)
+    button4.pack(side=RIGHT)
+    
+master= Tk()
+
+mytkinter = MyClass(master)
+
+master.mainloop()
