@@ -15,4 +15,8 @@ Progression to MVP (Minimal viable product).
 
 Power - Distinguish what power is needed and define a sutible source that is untethered and rechargeable.
 
-Control/Commands- Gain feedback for motor position. Refine controls to tackle motor movement based on duration of input. Define functions to perform specfic maneuvers for the arm. Amend variable burstTime to hold specific milliseconds.
+Control- Gain feedback for motor position. Refine controls to perform motor movement based on duration of input. Define functions to perform specfic maneuvers for the arm. Amend variable burstTime to hold specific milliseconds.
+
+Awareness- Install camera and ultrasonic sensors to gain an awareness of area surrounding Mr. A.
+
+GUI- Requirents: Buttons to toggle each motor or system on/off. A window for serial feedback from Arduino, 
