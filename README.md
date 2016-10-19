@@ -19,4 +19,4 @@ Control- Gain feedback for motor position. Refine controls to perform motor move
 
 Awareness- Install camera and ultrasonic sensors to gain an awareness of area surrounding Mr. A.
 
-GUI- Requirents: Buttons to toggle each motor or system on/off. A window for serial feedback from Arduino, 
+GUI- Requirents: Buttons to toggle each motor or system on/off. A window for serial feedback from Arduino, and a method to send serial data back. A viewing window for the camera feed. 
