@@ -2,23 +2,77 @@ from Tkinter import *
 import RPi.GPIO as GPIO
 import time
 
-# Pin Definitons:
-ledPin = 23 # Broadcom pin 23 (P1 pin 16)
-bmfPin = 24
-bmrPin = 25
+GPIO.setmode(GPIO.BOARD)
+ledPin = 37
+bmfPin = 3
+bmrPin = 5
+m1fPin = 7
+m1rPin = 11
+m2fPin = 13
+m2rPin = 15
+m3fPin = 19
+m3rPin = 21
+m4fPin = 23
+m4rPin = 26
+lwmfPin = 29
+lwmrPin = 31
+rwmfPin = 33
+rwmrPin = 35
 
-# Pin Setup:
-GPIO.setmode(GPIO.BCM) # Broadcom pin-numbering scheme
-GPIO.setup(ledPin, GPIO.OUT) # LED pin set as output
+GPIO.setup(ledPin, GPIO.OUT)
 GPIO.setup(bmfPin, GPIO.OUT)
 GPIO.setup(bmrPin, GPIO.OUT)
+GPIO.setup(m1fPin, GPIO.OUT)
+GPIO.setup(m1rPin, GPIO.OUT)
+GPIO.setup(m2fPin, GPIO.OUT)
+GPIO.setup(m2rPin, GPIO.OUT)
+GPIO.setup(m3fPin, GPIO.OUT)
+GPIO.setup(m3rPin, GPIO.OUT)
+GPIO.setup(m4fPin, GPIO.OUT)
+GPIO.setup(m4rPin, GPIO.OUT)
+GPIO.setup(lwmfPin, GPIO.OUT)
+GPIO.setup(lwmrPin, GPIO.OUT)
+GPIO.setup(rwmfPin, GPIO.OUT)
+GPIO.setup(rwmrPin, GPIO.OUT)
 
-# Initial state for LEDs:
 GPIO.output(ledPin, GPIO.LOW)
+GPIO.output(bmfPin, GPIO.LOW)
+GPIO.output(bmrPin, GPIO.LOW)
+GPIO.output(m1fPin, GPIO.LOW)
+GPIO.output(m1rPin, GPIO.LOW)
+GPIO.output(m2fPin, GPIO.LOW)
+GPIO.output(m2rPin, GPIO.LOW)
+GPIO.output(m3fPin, GPIO.LOW)
+GPIO.output(m3rPin, GPIO.LOW)
+GPIO.output(m4fPin, GPIO.LOW)
+GPIO.output(m4rPin, GPIO.LOW)
+GPIO.output(lwmfPin, GPIO.LOW)
+GPIO.output(lwmrPin, GPIO.LOW)
+GPIO.output(rwmfPin, GPIO.LOW)
+GPIO.output(rwmrPin, GPIO.LOW)
 
 LEDstate = 0
+
 bmfState = 0
 bmrState = 0
+
+m1Fstate = 0
+m1Rstate = 0
+
+m2Fstate = 0
+m2Rstate = 0
+
+m3Fstate = 0
+m3Rstate = 0
+
+m4Fstate = 0
+m4Rstate = 0
+
+lwmFstate = 0
+lwmRstate = 0
+
+rwmFstate = 0
+rwmRstate = 0
 
 def close_window():
     GPIO.cleanup()
@@ -26,54 +80,223 @@ def close_window():
 
 def spotlight():
   global LEDstate
+  global hedLEDbutton
   if LEDstate == 0:
+    hedLEDbutton.config(bg='green')
+    hedLEDbutton.config(activebackground="green")
     GPIO.output(ledPin, GPIO.HIGH)
     LEDstate = 1
   else:
+    hedLEDbutton.config(bg='red')
+    hedLEDbutton.config(activebackground="red")
     GPIO.output(ledPin, GPIO.LOW)
     LEDstate = 0
 
 def base_motor_fwd():
   global bmfState
   if bmfState == 0:
+    bmFbutton.config(bg='green')
+    bmFbutton.config(activebackground="green")
     GPIO.output(bmfPin, GPIO.HIGH)
     bmfState = 1
   else:
+    bmFbutton.config(bg='red')
+    bmFbutton.config(activebackground="red")
     GPIO.output(bmfPin, GPIO.LOW)
     bmfState = 0
 
 def base_motor_rev():
   global bmrState
   if bmrState == 0:
+    bmRbutton.config(bg='green')
+    bmRbutton.config(activebackground="green")
     GPIO.output(bmrPin, GPIO.HIGH)
     bmrState = 1
   else:
+    bmRbutton.config(bg='red')
+    bmRbutton.config(activebackground="red")
     GPIO.output(bmrPin, GPIO.LOW)
     bmrState = 0
 
-class MyClass:
+def m1_fwd():
+  global m1Fstate
+  if m1Fstate == 0:
+    m1Fbutton.config(bg='green')
+    m1Fbutton.config(activebackground="green")
+    GPIO.output(m1fPin, GPIO.HIGH)
+    m1Fstate = 1
+  else:
+    m1Fbutton.config(bg='red')
+    m1Fbutton.config(activebackground="red")
+    GPIO.output(m1fPin, GPIO.LOW)
+    m1Fstate = 0
 
-  def __init__(self, master):
+def m1_rev():
+  global m1Rstate
+  if m1Rstate == 0:
+    m1Rbutton.config(bg='green')
+    m1Rbutton.config(activebackground="green")
+    GPIO.output(m1rPin, GPIO.HIGH)
+    m1Rstate = 1
+  else:
+    m1Rbutton.config(bg='red')
+    m1Rbutton.config(activebackground="red")
+    GPIO.output(m1rPin, GPIO.LOW)
+    m1Rstate = 0
 
-    sec = Frame(master)
-    sec.pack()
-    bottomframe = Frame(master)
-    bottomframe.pack( side = BOTTOM )
+def m2_fwd():
+  global m2Fstate
+  if m2Fstate == 0:
+    m2Fbutton.config(bg='green')
+    m2Fbutton.config(activebackground="green")
+    GPIO.output(m2fPin, GPIO.HIGH)
+    m2Fstate = 1
+  else:
+    m2Fbutton.config(bg='red')
+    m2Fbutton.config(activebackground="red")
+    GPIO.output(m2fPin, GPIO.LOW)
+    m2Fstate = 0
 
-    button1 = Button(sec, text="QUIT", fg="red", command=close_window)
-    button1.pack(side=LEFT)
+def m2_rev():
+  global m2Rstate
+  if m2Rstate == 0:
+    m2Rbutton.config(bg='green')
+    m2Rbutton.config(activebackground="green")
+    GPIO.output(m2rPin, GPIO.HIGH)
+    m2Rstate = 1
+  else:
+    m2Rbutton.config(bg='red')
+    m2Rbutton.config(activebackground="red")
+    GPIO.output(m2rPin, GPIO.LOW)
+    m2Rstate = 0     
 
-    button2 = Button(sec, text="Spotlight", command=spotlight)
-    button2.pack(side=LEFT)
+def m3_fwd():
+  global m3Fstate
+  if m3Fstate == 0:
+    m3Fbutton.config(bg='green')
+    m3Fbutton.config(activebackground="green")
+    GPIO.output(m3fPin, GPIO.HIGH)
+    m3Fstate = 1
+  else:
+    m3Fbutton.config(bg='red')
+    m3Fbutton.config(activebackground="red")
+    GPIO.output(m3fPin, GPIO.LOW)
+    m3Fstate = 0
 
-    button3 = Button(sec, text="Base Motor Forward", command=base_motor_fwd)
-    button3.pack(side=RIGHT)
+def m3_rev():
+  global m3Rstate
+  if m3Rstate == 0:
+    m3Rbutton.config(bg='green')
+    m3Rbutton.config(activebackground="green")
+    GPIO.output(m3rPin, GPIO.HIGH)
+    m3Rstate = 1
+  else:
+    m3Rbutton.config(bg='red')
+    m3Rbutton.config(activebackground="red")
+    GPIO.output(m3rPin, GPIO.LOW)
+    m3Rstate = 0
 
-    button4 = Button(bottomframe, text="Base Motor Reverse", command=base_motor_rev)
-    button4.pack(side=RIGHT)
+def m4_fwd():
+  global m4Fstate
+  if m4Fstate == 0:
+    m4Fbutton.config(bg='green')
+    m4Fbutton.config(activebackground="green")
+    GPIO.output(m4fPin, GPIO.HIGH)
+    m4Fstate = 1
+  else:
+    m4Fbutton.config(bg='red')
+    m4Fbutton.config(activebackground="red")
+    GPIO.output(m4fPin, GPIO.LOW)
+    m4Fstate = 0
+
+def m4_rev():
+  global m4Rstate
+  if m4Rstate == 0:
+    m4Rbutton.config(bg='green')
+    m4Rbutton.config(activebackground="green")
+    GPIO.output(m4rPin, GPIO.HIGH)
+    m4Rstate = 1
+  else:
+    m4Rbutton.config(bg='red')
+    m4Rbutton.config(activebackground="red")
+    GPIO.output(m4rPin, GPIO.LOW)
+    m4Rstate = 0
+
+def retractAction():
+    global m2fstate
+    if m2Fstate == 0:
+        m2_fwd()
+        m1_rev()
+        retractActionBtn.config(bg='green')
+        retractActionBtn.config(activebackground="green")
+    else:
+        m2_fwd()
+        m1_rev()
+        retractActionBtn.config(bg='red')
+        retractActionBtn.config(activebackground="red")
     
-master= Tk()
+def extendAction():
+    global m2fstate
+    if m2Rstate == 0:
+        m2_rev()
+        m1_fwd()
+        extendActionBtn.config(bg='green')
+        extendActionBtn.config(activebackground="green")
+    else:
+        m2_rev()
+        m1_fwd()
+        extendActionBtn.config(bg='red')
+        extendActionBtn.config(activebackground="red")
 
-mytkinter = MyClass(master)
+root = Tk()
+root.title('Mr. A.')
+root.configure(background='black')
+root.geometry('1200x750-5+40')
 
-master.mainloop()
+qqButton = Button(root, text="QUIT", fg="red", command=close_window)
+qqButton.grid(row=0, column=1)
+
+hedLEDbutton = Button(root, height=3, width=17, text="Spotlight", bg="#e32636", activebackground="red", command=spotlight)
+hedLEDbutton.grid(row=1, column=1)
+
+bmFbutton = Button(root, height=3, width=17, text="Base Motor Left", bg="#e32636", activebackground="red", command=base_motor_fwd)
+bmFbutton.grid(row=0, column=2)
+
+bmRbutton = Button(root, height=3, width=17, text="Base Motor Right", bg="#e32636", activebackground="red", command=base_motor_rev)
+bmRbutton.grid(row=1, column=2)
+   
+m1Fbutton = Button(root, height=3, width=17, text="Motor 1 Forward", bg="#e32636", activebackground="red", command=m1_fwd)
+m1Fbutton.grid(row=0, column=3)
+
+m1Rbutton = Button(root, height=3, width=17, text="Motor 1 Reverse", bg="#e32636", activebackground="red", command=m1_rev)
+m1Rbutton.grid(row=1, column=3)
+
+m2Fbutton = Button(root, height=3, width=17, text="Motor 2 Forward", bg="#e32636", activebackground="red", command=m2_fwd)
+m2Fbutton.grid(row=0, column=4)
+
+m2Rbutton = Button(root, height=3, width=17, text="Motor 2 Reverse", bg="#e32636", activebackground="red", command=m2_rev)
+m2Rbutton.grid(row=1, column=4)
+
+m3Fbutton = Button(root, height=3, width=17, text="Motor 3 Forward", bg="#e32636", activebackground="red", command=m3_fwd)
+m3Fbutton.grid(row=0, column=5)
+
+m3Rbutton = Button(root, height=3, width=17, text="Motor 3 Reverse", bg="#e32636", activebackground="red", command=m3_rev)
+m3Rbutton.grid(row=1, column=5)
+
+m4Fbutton = Button(root, height=3, width=17, text="Gripper Open", bg="#e32636", activebackground="red", command=m4_fwd)
+m4Fbutton.grid(row=0, column=6)
+
+m4Rbutton = Button(root, height=3, width=17, text="Gripper Close", bg="#e32636", activebackground="red", command=m4_rev)
+m4Rbutton.grid(row=1, column=6)
+
+extendActionBtn = Button(root, height=3, width=17, text="Extend Arm", bg="#e32636", activebackground="red", command=extendAction)
+extendActionBtn.grid(row=2, column=1)
+
+retractActionBtn = Button(root, height=3, width=17, text="Retract Arm", bg="#e32636", activebackground="red", command=retractAction)
+retractActionBtn.grid(row=3, column=1)
+
+#testbutton = Button(root, height=10, width=17, text="test", bg="#e32636", activebackground="red")
+#testbutton.grid(row=1, column=0)
+
+
+root.mainloop()
