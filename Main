@@ -9,8 +9,10 @@ boolean stringComplete = false;
 //zero are how many cycles the motor is active for. Millis is set when a motor 
 //direction is activated.
 
-const int BmotorFwd = 2;
-const int BmotorRev = 3;
+const int BmotorFwd = 22;
+const int BmotorRev = 24;
+const int bmFinput = 23;
+const int bmRinput = 25;
 const int bmfInput = 50;
 const int bmrInput = 51;
 int BmotorfState = 0;
@@ -22,8 +24,10 @@ unsigned long BmotorMillis;
 //zero are how many cycles the motor is active for. Millis is set when a motor 
 //direction is activated.
 
-const int m1Fwd = 4;
-const int m1Rev = 5;
+const int m1Fwd = 26;
+const int m1Rev = 28;
+const int m1Finput = 27;
+const int m1Rinput = 29;
 int m1fState = 0;
 int m1rState = 0;
 unsigned long m1Millis;
@@ -33,8 +37,10 @@ unsigned long m1Millis;
 //zero are how many cycles the motor is active for. Millis is set when a motor 
 //direction is activated.
 
-const int m2Fwd = 6;
-const int m2Rev = 7;
+const int m2Fwd = 30;
+const int m2Rev = 32;
+const int m2Finput = 31;
+const int m2Rinput = 33;
 int m2fState = 0;
 int m2rState = 0;
 unsigned long m2Millis;
@@ -44,8 +50,10 @@ unsigned long m2Millis;
 //zero are how many cycles the motor is active for. Millis is set when a motor 
 //direction is activated.
 
-const int m3Fwd = 8;
-const int m3Rev = 9;
+const int m3Fwd = 34;
+const int m3Rev = 36;
+const int m3Finput = 35;
+const int m3Rinput = 37;
 int m3fState = 0;
 int m3rState = 0;
 unsigned long m3Millis;
@@ -53,29 +61,35 @@ unsigned long m3Millis;
 //------Gripper, Motor 4 - m4Fwd/Rev is the pin used to determine motor direction.
 //gripTime is the time it take to complete a full open close cycle.
 
-const int m4Fwd = 10;
-const int m4Rev = 11;
+const int m4Fwd = 38;
+const int m4Rev = 40;
+const int m4Finput = 39;
+const int m4Rinput = 41;
 const int gripTime = 850;
 
-//------Left Wheel Motor - leftWmotorFwd/Rev is the pin used to determine motor 
+//------Left Wheel Motor - lwmFwd/Rev is the pin used to determine motor 
 //direction. State is use to see if a direction is already in use, increments over
 //zero are how many cycles the motor is active for. Millis is set when a motor 
 //direction is activated.
 
-const int leftWmotorFwd = 22;
-const int leftWmotorRev = 23;
+const int lwmFwd = 42;
+const int lwmRev = 44;
+const int lwmFinput = 43;
+const int lwmRinput = 45;
 unsigned long lWmFMillis;
 unsigned long lWmRMillis;
 int lWmFState = 0;
 int lWmRState = 0;
 
-//------Right Wheel Motor - rightWmotorFwd/Rev is the pin used to determine motor 
+//------Right Wheel Motor - rwmFwd/Rev is the pin used to determine motor 
 //direction. State is use to see if a direction is already in use, increments over
 //zero are how many cycles the motor is active for. Millis is set when a motor 
 //direction is activated.
 
-const int rightWmotorFwd  = 24;
-const int rightWmotorRev  = 25;
+const int rwmFwd  = 46;
+const int rwmRev  = 48;
+const int rwmFinput = 47;
+const int rwmRinput = 49;
 unsigned long rWmFMillis;
 unsigned long rWmRMillis;
 int rWmFState = 0;
@@ -84,8 +98,8 @@ int rWmRState = 0;
 //------LED - LEDpin is the pin used for the LED. State is used to determine which
 //way to toggle the spotlight.
 
+const int LEDpin  = 13;
 const int LEDinput = 53;
-const int LEDpin  = 12;
 int LEDstate = 0;
 
 
@@ -95,28 +109,32 @@ int LEDstate = 0;
 
 int burstTime  = 1000;
 int mStep = 250;
+const int armenablepin = 3;
+const int wheelenablepin = 2;
 
 //------Commands - commandSig is an array of all the commands, in ASCII, know and
 //expected for the commandCheck() function. commandQty is how many commands are know
 // in the commandCheck() function.
 
-const int commandSig[] = {120, 50, 46, 48, 49, 51, 52, 55, 54, 57, 53, 56, 43, 45, 113, 97, 101, 100, 119, 115, 116, 99, 122};
+const int commandSig[] = {
+  120, 50, 46, 48, 49, 51, 52, 55, 54, 57, 53, 56, 43, 45, 113, 97, 101, 100, 119, 115, 116, 99, 122};
 const int commandQty = 22;
 
 //=======================================================================================================================================
 void spin180r() {
-//This function will perform a clockwise 180
-  digitalWrite(leftWmotorRev, HIGH);
-  digitalWrite(rightWmotorFwd, HIGH);
+  //This function will perform a clockwise 180
+  digitalWrite(lwmRev, HIGH);
+  digitalWrite(rwmFwd, HIGH);
   delay(2375);
-  digitalWrite(leftWmotorRev, LOW);
-  digitalWrite(rightWmotorFwd, LOW);
+  digitalWrite(lwmRev, LOW);
+  digitalWrite(rwmFwd, LOW);
 }
 //=======================================================================================================================================
 void setup() {
 //Setup will start the serial. Set all the motor direction and LED pins to output.
 //Should wait for serial to be recieved then print an intro.
   Serial.begin(9600);
+  
   pinMode(BmotorFwd, OUTPUT);
   pinMode(BmotorRev, OUTPUT);
   pinMode(m1Fwd, OUTPUT);
@@ -127,23 +145,45 @@ void setup() {
   pinMode(m3Rev, OUTPUT);
   pinMode(m4Fwd, OUTPUT);
   pinMode(m4Rev, OUTPUT);
-  pinMode(leftWmotorFwd, OUTPUT);
-  pinMode(leftWmotorRev, OUTPUT);
-  pinMode(rightWmotorFwd, OUTPUT);
-  pinMode(rightWmotorRev, OUTPUT);
+  pinMode(lwmFwd, OUTPUT);
+  pinMode(lwmRev, OUTPUT);
+  pinMode(rwmFwd, OUTPUT);
+  pinMode(rwmRev, OUTPUT);
   pinMode(LEDpin, OUTPUT);
-  pinMode(LEDinput, INPUT);
+  pinMode(armenablepin, OUTPUT);
+  pinMode(wheelenablepin, OUTPUT);
+
+  
   pinMode(bmfInput, INPUT);
   pinMode(bmrInput, INPUT);
-  Serial.println("Arm' Control."); delay(1500);
+  pinMode(m1Finput, INPUT);
+  pinMode(m1Rinput, INPUT);
+  pinMode(m2Finput, INPUT);
+  pinMode(m2Rinput, INPUT);
+  pinMode(m3Finput, INPUT);
+  pinMode(m3Rinput, INPUT);
+  pinMode(m4Finput, INPUT);
+  pinMode(m4Rinput, INPUT);
+  pinMode(lwmFinput, INPUT);
+  pinMode(lwmRinput, INPUT);
+  pinMode(rwmFinput, INPUT);
+  pinMode(rwmRinput, INPUT);
+  pinMode(LEDinput, INPUT);
+  
+  analogWrite(armenablepin, 255);
+  analogWrite(wheelenablepin, 255);
+  //analogWrite(LEDpin, 255);
+  
+  Serial.println("Arm' Control."); 
+  delay(1500);
   Serial.println("Ready.");
 }
 //=======================================================================================================================================
 void serialEvent() {
-//Serial catcher. If there's serial available it will be added to a string, until
-//a newline is received. After a newline the string state will be active. Then
-//the string is complete and loop() begins. I have included a limiter() as a 
-//precaution.
+  //Serial catcher. If there's serial available it will be added to a string, until
+  //a newline is received. After a newline the string state will be active. Then
+  //the string is complete and loop() begins. I have included a limiter() as a 
+  //precaution.
   while (Serial.available() > 0) {
     char inChar = (char)Serial.read();
     if (inChar == '\n') {
@@ -156,11 +196,11 @@ void serialEvent() {
 }
 //=======================================================================================================================================
 void loop() {
-//This will assess a string passed from the serial.event(). First the string is
-//printed. The commandCheck() will compare it to a list of know strings, if a
-//match is found a command will be performed. The limiter within the 'if' is a 
-//precaution. After the string and limiter have been used the string contents are 
-//cleared and state deactivated. If nothing else the loop with run the limiter.
+  //This will assess a string passed from the serial.event(). First the string is
+  //printed. The commandCheck() will compare it to a list of know strings, if a
+  //match is found a command will be performed. The limiter within the 'if' is a 
+  //precaution. After the string and limiter have been used the string contents are 
+  //cleared and state deactivated. If nothing else the loop with run the limiter.
   if (stringComplete) {
     Serial.print(serialString1);
     Serial.println(": ");
@@ -170,245 +210,318 @@ void loop() {
     stringComplete = false;
   }
   limiter();
-  
-  if (digitalRead(LEDinput) == HIGH) {
-    Serial.println(digitalRead(LEDinput));
-  if (LEDstate == 0) {
-        Serial.println("Spotlight On. ");
-        digitalWrite(LEDpin, HIGH);
-        LEDstate = 1;
-      }
-      else if (LEDstate == 1) {
-        Serial.println("Spotlight Off. ");
-        digitalWrite(LEDpin, LOW);
-        LEDstate = 0;
-    }
-  }
-  if (digitalRead(bmfInput) == HIGH) {
-    Serial.println(digitalRead(bmfInput));
-        digitalWrite(BmotorFwd, HIGH);
-      }
-      else if (digitalRead(bmfInput) == LOW) {
-        digitalWrite(BmotorFwd, LOW);
-      }
-      
-  if (digitalRead(bmrInput) == HIGH) {
-    Serial.println(digitalRead(bmrInput));
-        digitalWrite(BmotorRev, HIGH);
-      }
-      else if (digitalRead(bmrInput) == LOW) {
-        digitalWrite(BmotorRev, LOW);
-      }
 }
 //=======================================================================================================================================
+void digitalInCheck() {
+
+  if (digitalRead(LEDinput) == HIGH) {
+    if (LEDstate == 0) {
+      digitalWrite(LEDpin, HIGH);
+      LEDstate = 1;
+    }
+    else if (LEDstate == 1) {
+      digitalWrite(LEDpin, LOW);
+      LEDstate = 0;
+    }
+  }
+  if (digitalRead(bmFinput) == HIGH) {
+    digitalWrite(BmotorFwd, HIGH);
+  }
+  else if (digitalRead(bmFinput) == LOW) {
+    digitalWrite(BmotorFwd, LOW);
+  }
+
+  if (digitalRead(bmRinput) == HIGH) {
+    digitalWrite(BmotorRev, HIGH);
+  }
+  else if (digitalRead(bmRinput) == LOW) {
+    digitalWrite(BmotorRev, LOW);
+  }
+  if (digitalRead(m1Finput) == HIGH) {
+    digitalWrite(m1Fwd, HIGH);
+  }
+  else if (digitalRead(m1Finput) == LOW) {
+    digitalWrite(m1Fwd, LOW);
+  }
+  if (digitalRead(m1Rinput) == HIGH) {
+    digitalWrite(m1Rev, HIGH);
+  }
+  else if (digitalRead(m1Rinput) == LOW) {
+    digitalWrite(m1Rev, LOW);
+  }
+  if (digitalRead(m2Finput) == HIGH) {
+    digitalWrite(m2Fwd, HIGH);
+  }
+  else if (digitalRead(m2Finput) == LOW) {
+    digitalWrite(m2Fwd, LOW);
+  }
+  if (digitalRead(m2Rinput) == HIGH) {
+    digitalWrite(m2Rev, HIGH);
+  }
+  else if (digitalRead(m2Rinput) == LOW) {
+    digitalWrite(m2Rev, LOW);
+  }
+  if (digitalRead(m3Finput) == HIGH) {
+    digitalWrite(m3Fwd, HIGH);
+  }
+  else if (digitalRead(m3Finput) == LOW) {
+    digitalWrite(m3Fwd, LOW);
+  }
+  if (digitalRead(m3Rinput) == HIGH) {
+    digitalWrite(m3Rev, HIGH);
+  }
+  else if (digitalRead(m3Rinput) == LOW) {
+    digitalWrite(m3Rev, LOW);
+  }
+  if (digitalRead(m4Finput) == HIGH) {
+    digitalWrite(m4Fwd, HIGH);
+  }
+  else if (digitalRead(m4Finput) == LOW) {
+    digitalWrite(m4Fwd, LOW);
+  }
+  if (digitalRead(m4Rinput) == HIGH) {
+    digitalWrite(m4Rev, HIGH);
+  }
+  else if (digitalRead(m4Rinput) == LOW) {
+    digitalWrite(m4Rev, LOW);
+  }
+  if (digitalRead(lwmFinput) == HIGH) {
+    digitalWrite(lwmFwd, HIGH);
+  }
+  else if (digitalRead(lwmFinput) == LOW) {
+    digitalWrite(lwmFwd, LOW);
+  }
+  if (digitalRead(lwmRinput) == HIGH) {
+    digitalWrite(lwmRev, HIGH);
+  }
+  else if (digitalRead(lwmRinput) == LOW) {
+    digitalWrite(lwmRev, LOW);
+  }
+  if (digitalRead(rwmFinput) == HIGH) {
+    digitalWrite(rwmFwd, HIGH);
+  }
+  else if (digitalRead(rwmFinput) == LOW) {
+    digitalWrite(rwmFwd, LOW);
+  }
+  if (digitalRead(rwmRinput) == HIGH) {
+    digitalWrite(rwmRev, HIGH);
+  }
+  else if (digitalRead(rwmRinput) == LOW) {
+    digitalWrite(rwmRev, LOW);
+  }
+}
+
+//=======================================================================================================================================
 void limiter() {
-//This function will check for active states and deactivate them if a 
-//predetermined time has passed. Some states can be stacked, if the time for a
-//stacked state is reached no deactivation is perfomed and the stack is reduced.
+  //This function will check for active states and deactivate them if a 
+  //predetermined time has passed. Some states can be stacked, if the time for a
+  //stacked state is reached no deactivation is perfomed and the stack is reduced.
+
+  digitalInCheck();
 
   unsigned long currentMillis = millis();
 
   //------Time active check for Base Motor, Forward. Stack
-  
+
   if ((BmotorfState > 1) && (currentMillis - BmotorMillis >= burstTime)) {
     BmotorfState--;
     BmotorMillis =  millis();
     Serial.println("Tick, Base Motor Forward.");
   }
-  
+
   //------Time active check for Base Motor, Forward. End
-  
+
   if ((BmotorfState == 1) && (currentMillis - BmotorMillis >= burstTime)) {
     digitalWrite(BmotorFwd, LOW);
     BmotorfState--;
     Serial.println("Stopped, Base Motor Forward.");
   }
-  
+
   //------Time active check for Base Motor, Reverse. Stack
-  
+
   if ((BmotorrState > 1) && (currentMillis - BmotorMillis >= burstTime)) {
     BmotorrState--;
     BmotorMillis =  millis();
     Serial.println("Tick, Base Motor Reverse.");
   }
-  
+
   //------Time active check for Base Motor, Reverse. End
-  
+
   if ((BmotorrState == 1) && (currentMillis - BmotorMillis >= burstTime)) {
     digitalWrite(BmotorRev, LOW);
     BmotorrState--;
     Serial.println("Stopped, Base Motor Reverse.");
   }
-  
+
   //------Time active check for Motor 1, Forward. Stack
-  
+
   if ((m1fState > 1) && (currentMillis - m1Millis >= burstTime)) {
     m1fState--;
     m1Millis =  millis();
     Serial.println("Tick, m1 Forward.");
   }
-  
+
   //------Time active check for Motor 1, Forward. End
-  
+
   if ((m1fState == 1) && (currentMillis - m1Millis >= burstTime)) {
     digitalWrite(m1Fwd, LOW);
     m1fState--;
     Serial.println("Stopped, m1 Forward.");
   }
-  
+
   //------Time active check for Motor 1, Reverse. Stack
-  
+
   if ((m1rState > 1) && (currentMillis - m1Millis >= burstTime)) {
     m1rState--;
     m1Millis =  millis();
     Serial.println("Tick, m1 Reverse.");
   }
-  
+
   //------Time active check for Motor 1, Reverse. End
-  
+
   if ((m1rState == 1) && (currentMillis - m1Millis >= burstTime)) {
     digitalWrite(m1Rev, LOW);
     m1rState--;
     Serial.println("Stopped, m1 Reverse.");
   }
-  
+
   //------Time active check for Motor 2, Forward. Stack
-  
+
   if ((m2fState > 1) && (currentMillis - m2Millis >= burstTime)) {
     m2fState--;
     m2Millis =  millis();
     Serial.println("Tick, m2 Forward.");
   }
-  
+
   //------Time active check for Motor 2, Forward. End
-  
+
   if ((m2fState == 1) && (currentMillis - m2Millis >= burstTime)) {
     digitalWrite(m2Fwd, LOW);
     m2fState--;
     Serial.println("Stopped, m2 Forward.");
   }
-  
+
   //------Time active check for Motor 2, Reverse. Stack
-  
+
   if ((m2rState > 1) && (currentMillis - m2Millis >= burstTime)) {
     m2rState--;
     m2Millis =  millis();
     Serial.println("Tick, m2 Reverse.");
   }
-  
+
   //------Time active check for Motor 2, Reverse. End
-  
+
   if ((m2rState == 1) && (currentMillis - m2Millis >= burstTime)) {
     digitalWrite(m2Rev, LOW);
     m2rState--;
     Serial.println("Stopped, m2 Reverse.");
   }
-  
+
   //------Time active check for Motor 3, Forward. Stack
-  
+
   if ((m3fState > 1) && (currentMillis - m3Millis >= burstTime)) {
     m3fState--;
     m3Millis =  millis();
     Serial.println("Tick, m3 Forward.");
   }
-  
+
   //------Time active check for Motor 3, Forward. End
-  
+
   if ((m3fState == 1) && (currentMillis - m3Millis >= burstTime)) {
     digitalWrite(m3Fwd, LOW);
     m3fState--;
     Serial.println("Stopped, m3 Forward.");
   }
-  
+
   //------Time active check for Motor 3, Reverse. Stack
-  
+
   if ((m3rState > 1) && (currentMillis - m3Millis >= burstTime)) {
     m3rState--;
     m3Millis =  millis();
     Serial.println("Tick, m3 Reverse.");
   }
-  
+
   //------Time active check for Motor 3, Reverse. End
-  
+
   if ((m3rState == 1) && (currentMillis - m3Millis >= burstTime)) {
     digitalWrite(m3Rev, LOW);
     m3rState--;
     Serial.println("Stopped, m3 Reverse.");
   }
-  
+
   //------Time active check for Left Wheel Motor, Forward. Stack
-  
+
   if ((lWmFState > 1) && (currentMillis - lWmFMillis >= burstTime)) {
     lWmFState--;
     lWmFMillis =  millis();
     Serial.println("Tick, Left Wheel Motor Forward.");
   }
-  
+
   //------Time active check for Left Wheel Motor, Forward. End
-  
+
   if ((lWmFState == 1) && (currentMillis - lWmFMillis >= burstTime)) {
-    digitalWrite(leftWmotorFwd, LOW);
+    digitalWrite(lwmFwd, LOW);
     lWmFState--;
     Serial.println("Stopped, Left Wheel Motor Forward.");
   }
-  
+
   //------Time active check for Right Wheel Motor, Forward. Stack
-  
+
   if ((rWmFState > 1) && (currentMillis - rWmFMillis >= burstTime)) {
     rWmFState--;
     rWmFMillis =  millis();
     Serial.println("Tick, Right Wheel Motor Forward.");
   }
-  
+
   //------Time active check for Right Wheel Motor, Forward. End
-  
+
   if ((rWmFState == 1) && (currentMillis - rWmFMillis >= burstTime)) {
-    digitalWrite(rightWmotorFwd, LOW);
+    digitalWrite(rwmFwd, LOW);
     rWmFState--;
     Serial.println("Stopped, Right Wheel Motor Forward.");
   }
-  
+
   //------Time active check for Left Wheel Motor, Reverse. Stack
-  
+
   if ((lWmRState > 1) && (currentMillis - lWmRMillis >= burstTime)) {
     lWmRState--;
     lWmRMillis =  millis();
     Serial.println("Tick, Left Wheel Motor Reverse.");
   }
-  
+
   //------Time active check for Left Wheel Motor, Reverse. End
-  
+
   if ((lWmRState == 1) && (currentMillis - lWmRMillis >= burstTime)) {
-    digitalWrite(leftWmotorRev, LOW);
+    digitalWrite(lwmRev, LOW);
     lWmRState--;
     Serial.println("Stopped, Left Wheel Motor Reverse.");
   }
-  
+
   //------Time active check for Right Wheel Motor, Reverse. Stack
-  
+
   if ((rWmRState > 1) && (currentMillis - rWmRMillis >= burstTime)) {
     rWmRState--;
     rWmRMillis =  millis();
     Serial.println("Tick, Right Wheel Motor Reverse.");
   }
-  
+
   //------Time active check for Right Wheel Motor, Reverse. End
-  
+
   if ((rWmRState == 1) && (currentMillis - rWmRMillis >= burstTime)) {
-    digitalWrite(rightWmotorRev, LOW);
+    digitalWrite(rwmRev, LOW);
     rWmRState--;
     Serial.println("Stopped, Right Wheel Motor Reverse.");
   }
 }
 //=========================================================================================
 void commandCheck() {
-//This functions will check the serialString for parts of the commandSig array, if
-//found the relevent action is performed.
+  //This functions will check the serialString for parts of the commandSig array, if
+  //found the relevent action is performed.
 
   for (int x = 0; x < commandQty; x++) {
-    
+
     //------This command will print all the current motor states. Used for debugging
-    
+
     if (serialString1 == "state")
     {
       Serial.print(BmotorfState);
@@ -420,15 +533,15 @@ void commandCheck() {
       Serial.print(m3fState);
       Serial.println(m3rState);
     }
-    
+
     //------This command will queue both wheels forward.
-    
+
     else if (serialString1[x] == 'w')
     {
       if (lWmRState == 0) {
         Serial.println("Command: Full Forward.");
-        digitalWrite(leftWmotorFwd, HIGH);
-        digitalWrite(rightWmotorFwd, HIGH);
+        digitalWrite(lwmFwd, HIGH);
+        digitalWrite(rwmFwd, HIGH);
         lWmFMillis = millis();
         rWmFMillis = millis();
         lWmFState++;
@@ -438,15 +551,15 @@ void commandCheck() {
         Serial.println("DENIED: Full Forward.");
       }
     }
-    
+
     //------This command will queue both wheels in reverse.
-    
+
     else if (serialString1[x] == 's')
     {
       if (lWmFState == 0) {
         Serial.println("Command: Full Reverse.");
-        digitalWrite(leftWmotorRev, HIGH);
-        digitalWrite(rightWmotorRev, HIGH);
+        digitalWrite(lwmRev, HIGH);
+        digitalWrite(rwmRev, HIGH);
         lWmRMillis = millis();
         rWmRMillis = millis();
         lWmRState++;
@@ -456,55 +569,55 @@ void commandCheck() {
         Serial.println("DENIED: Full Reverse.");
       }
     }
-    
+
     //------This command will queue the right wheel forwad
     else if (serialString1[x] == 'q')
     {
       if (rWmRState == 0) {
         Serial.println("Command: Right Wheel Forward");
-        digitalWrite(rightWmotorFwd, HIGH);
+        digitalWrite(rwmFwd, HIGH);
         rWmFMillis = millis();
         rWmFState++;
       }
     }
-    
+
     //------This command will queue the right wheel to reverse.
     else if (serialString1[x] == 'a')
     {
       if (rWmFState == 0) {
         Serial.println("Command: Right Wheel Reverse");
-        digitalWrite(rightWmotorRev, HIGH);
+        digitalWrite(rwmRev, HIGH);
         rWmRMillis = millis();
         rWmRState++;
       }
     }
-    
+
     //------This command will queue the left wheel forward.
-    
+
     else if (serialString1[x] == 'e')
     {
       if (lWmRState == 0) {
         Serial.println("Command: Left Wheel Forward");
-        digitalWrite(leftWmotorFwd, HIGH);
+        digitalWrite(lwmFwd, HIGH);
         lWmFMillis = millis();
         lWmFState++;
       }
     }
-    
+
     //------This command will queue the left wheel to reverse.
-    
+
     else if (serialString1[x] == 'd')
     {
       if (lWmFState == 0) {
         Serial.println("Command: Left Wheel Reverse");
-        digitalWrite(leftWmotorRev, HIGH);
+        digitalWrite(lwmRev, HIGH);
         lWmRMillis = millis();
         lWmRState++;
       }
     }
-    
+
     //------This command will toggle the spotlight on/off.
-    
+
     else if (serialString1[x] == '0' | digitalRead(LEDinput) == HIGH)
     {
       if (LEDstate == 0) {
@@ -516,11 +629,11 @@ void commandCheck() {
         Serial.println("Spotlight Off. ");
         digitalWrite(LEDpin, LOW);
         LEDstate = 0;
+      }
     }
-    }
-    
+
     //------This command will queue the base motor to rotate left.
-    
+
     else if (serialString1[x] == '1')
     {
       if (BmotorrState == 0) {
@@ -530,9 +643,9 @@ void commandCheck() {
         BmotorfState++;
       }
     }
-    
+
     //------This command will queue the base motor to rotate right.
-    
+
     else if (serialString1[x] == '3')
     {
       if (BmotorfState == 0) {
@@ -542,9 +655,9 @@ void commandCheck() {
         BmotorrState++;
       }
     }
-    
+
     //------This command will queue motor one forward.
-    
+
     else if (serialString1[x] == '7')
     {
       if (m1rState == 0) {
@@ -554,7 +667,7 @@ void commandCheck() {
         m1fState++;
       }
     }
-    
+
     //------This command will queue motor one to reverse.
     else if (serialString1[x] == '4')
     {
@@ -565,9 +678,9 @@ void commandCheck() {
         m1rState++;
       }
     }
-    
+
     //------This command will queue motor two forward.
-    
+
     else if (serialString1[x] == '9')
     {
       if (m2rState == 0) {
@@ -577,9 +690,9 @@ void commandCheck() {
         m2fState++;
       }
     }
-    
+
     //------This command will queue motor two to reverse.
-    
+
     else if (serialString1[x] == '6')
     {
       if (m2fState == 0) {
@@ -589,9 +702,9 @@ void commandCheck() {
         m2rState++;
       }
     }
-    
+
     //------This command will queue motor three forward.
-    
+
     else if (serialString1[x] == '8')
     {
       if (m3rState == 0) {
@@ -604,9 +717,9 @@ void commandCheck() {
         Serial.println("DENIED: m3, Forward.");
       }
     }
-    
+
     //------This command will queue motor three to reverse.
-    
+
     else if (serialString1[x] == '5')
     {
       if (m3fState == 0) {
@@ -619,17 +732,17 @@ void commandCheck() {
         Serial.println("DENIED: m3, Reverse.");
       }
     }
-    
+
     //------This command will queue the gripper to open
-    
-    else if (serialString1[x] == '+')
+
+      else if (serialString1[x] == '+')
     {
       Serial.println("Command: Gripper, Open.");
       digitalWrite(m4Fwd, HIGH);
       delay(gripTime);
       digitalWrite(m4Fwd, LOW);
     }
-    
+
     //------This command will queue the gripper to close
     else if (serialString1[x] == '-')
     {
@@ -638,9 +751,9 @@ void commandCheck() {
       delay(gripTime);
       digitalWrite(m4Rev, LOW);
     }
-    
+
     //------This command will increment the burstTtime variable up.
-    
+
     else if (serialString1[x] == '2')
     {
       Serial.print("Burst time was: ");
@@ -650,9 +763,9 @@ void commandCheck() {
       Serial.print(burstTime);
       Serial.println(".");
     }
-    
+
     //------This command will increment the burstTtime variable down.
-    
+
     else if (serialString1[x] == '.')
     {
       Serial.print("Burst time was: ");
@@ -662,39 +775,39 @@ void commandCheck() {
       Serial.print(burstTime);
       Serial.println(".");
     }
-    
+
     //------This command will queue anti-clockwise spin.
-    
+
     else if (serialString1[x] == 'z')
     {
       if ((lWmRState == 0) && (rWmFState == 0)) {
         Serial.println("Command: spin, Left.");
-        digitalWrite(leftWmotorFwd, HIGH);
-        digitalWrite(rightWmotorRev, HIGH);
+        digitalWrite(lwmFwd, HIGH);
+        digitalWrite(rwmRev, HIGH);
         lWmFMillis = millis();
         rWmRMillis = millis();
         lWmFState++;
         rWmRState++;
       }
     }
-    
+
     //------This command will queue a clockwise spin.
-    
+
     else if (serialString1[x] == 'c')
     {
       if ((lWmRState == 0) && (rWmFState == 0)) {
         Serial.println("Command: spin, Right.");
-        digitalWrite(leftWmotorRev, HIGH);
-        digitalWrite(rightWmotorFwd, HIGH);
+        digitalWrite(lwmRev, HIGH);
+        digitalWrite(rwmFwd, HIGH);
         lWmRMillis = millis();
         rWmFMillis = millis();
         lWmRState++;
         rWmFState++;
       }
     }
-    
+
     //------This command will perform a clockwise 180.
-    
+
     else if (serialString1[x] == 'x')
     {
       Serial.println("Command: spin, 180.");
